@@ -258,6 +258,8 @@ async def health_check():
 
 
 @app.post("/detect", response_model=DetectionResponse)
+@app.post("/detect/", response_model=DetectionResponse)
+
 async def detect_objects(request: ImageRequest):
     """
     Main detection endpoint
