@@ -5,6 +5,7 @@ FastAPI server with YOLOv8 object detection for visually impaired users
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from pydantic import BaseModel
 import cv2
 import numpy as np
@@ -409,7 +410,17 @@ async def detect_with_query(request: ImageRequest, query: str = ""):
     except Exception as e:
         logger.error(f"Query detection error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
+        
+@app.options("/{full_path:path}")
+async def options_handler(full_path: str):
+    return Response(
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*",
+        },
+    )
 
 if __name__ == "__main__":
     import uvicorn
