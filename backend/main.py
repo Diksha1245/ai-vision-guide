@@ -3,7 +3,7 @@ AI Navigation Assistant Backend
 FastAPI server with YOLOv8 object detection for visually impaired users
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel
@@ -423,7 +423,9 @@ async def options_handler(full_path: str):
             "Access-Control-Allow-Headers": "*",
         },
     )
-
+@app.api_route("/{path:path}", methods=["GET", "POST", "OPTIONS"])
+async def catch_all(path: str, request: Request):
+    return {"message": "Invalid route", "path": path}
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
